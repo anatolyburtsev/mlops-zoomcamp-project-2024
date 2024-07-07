@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "sandbox"
+version = "0.1.0"
+description = ""
+authors = ["Anatolii Burtsev <ab.canada.world@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+jupyterlab = "^4.2.3"
+pandas = "^2.2.2"
+ipykernel = "^6.29.5"
+scikit-learn = "^1.5.1"
+matplotlib = "^3.9.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

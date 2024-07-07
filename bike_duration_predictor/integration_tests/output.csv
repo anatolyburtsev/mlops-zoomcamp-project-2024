@@ -1,0 +1,3 @@
+electric_bike,departure_temperature_c,departure_hour,membership_cat_annual_pass,membership_cat_pay_per_ride,membership_cat_other,membership_cat_community_pass,membership_cat_monthly_pass,membership_cat_unknown,duration_min
+1,7,0,1,0,0,0,0,0,17
+0,9,20,0,1,0,0,0,0,6

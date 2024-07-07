@@ -1,0 +1,4 @@
+Departure,Return,Bike,Electric bike,Departure station,Return station,Membership type,Covered distance (m),Duration (sec.),Departure temperature (C),Return temperature (C),Stopover duration (sec.),Number of stopovers
+2024-05-01 0:00,2024-05-01 0:00,30250,TRUE,0002 Burrard Station (Melville & Dunsmuir),0266 St Catherines & 7th,365 Corporate Plus,4322,1064,7,11,0,0
+2024-05-01 20:00,2024-05-01 0:00,1276,FALSE,0230 Alexander & Railway,0052 Cambie & Water,Pay Per Ride,1388,411,9,11,0,0
+2024-05-01 23:00,2024-05-01 0:00,1276,FALSE,0230 Alexander & Railway,0052 Cambie & Water,Pay Per Ride,13,11,9,11,0,0
