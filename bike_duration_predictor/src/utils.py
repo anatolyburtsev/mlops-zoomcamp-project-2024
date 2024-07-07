@@ -3,7 +3,11 @@ from urllib.parse import urlparse
 
 import boto3
 import pandas as pd
-from io import StringIO
+import joblib
+import json
+from io import StringIO, BytesIO
+from typing import Union
+from botocore.exceptions import NoCredentialsError, PartialCredentialsError
 
 
 def parse_s3_path(s3_path):
@@ -17,8 +21,25 @@ def read_from_local(path):
     return pd.read_csv(path)
 
 
-def write_to_local(df, path):
-    df.to_csv(path, index=False)
+def write_to_local(data: Union[pd.DataFrame, dict, object], path: str):
+    """
+    Writes data to a local file. The data can be a Pandas DataFrame, a dictionary (JSON), or a serialized model.
+
+    Args:
+        data (Union[pd.DataFrame, dict, object]): The data to be saved. Can be a DataFrame, a JSON serializable dict, or a model.
+        path (str): The path to the file in the local filesystem.
+    """
+    try:
+        if isinstance(data, pd.DataFrame):
+            data.to_csv(path, index=False)
+        elif isinstance(data, dict):
+            with open(path, 'w') as f:
+                json.dump(data, f)
+        else:
+            joblib.dump(data, path)
+        print(f"Successfully wrote to {path}")
+    except Exception as e:
+        print(f"Failed to write to local file: {e}")
 
 
 def read_from_s3(bucket, key):
@@ -44,19 +65,34 @@ def read_from_s3(bucket, key):
         raise Exception(f"Unsuccessful S3 get_object response. Status - {status}")
 
 
-def write_to_s3(df, bucket, key):
+def write_to_s3(data: Union[pd.DataFrame, dict, object], bucket: str, key: str):
     """
-    Writes a DataFrame to a CSV file in an S3 bucket.
+    Writes data to an S3 bucket. The data can be a Pandas DataFrame, a dictionary (JSON), or a serialized model.
 
     Args:
-        df (pd.DataFrame): The DataFrame to be saved.
+        data (Union[pd.DataFrame, dict, object]): The data to be saved. Can be a DataFrame, a JSON serializable dict, or a model.
         bucket (str): The name of the S3 bucket.
-        key (str): The key (path) to the CSV file in the S3 bucket.
+        key (str): The key (path) to the file in the S3 bucket.
     """
     s3 = create_s3_client()
-    csv_buffer = StringIO()
-    df.to_csv(csv_buffer, index=False)
-    s3.put_object(Bucket=bucket, Key=key, Body=csv_buffer.getvalue())
+    try:
+        if isinstance(data, pd.DataFrame):
+            csv_buffer = StringIO()
+            data.to_csv(csv_buffer, index=False)
+            s3.put_object(Bucket=bucket, Key=key, Body=csv_buffer.getvalue())
+        elif isinstance(data, dict):
+            json_buffer = json.dumps(data)
+            s3.put_object(Bucket=bucket, Key=key, Body=json_buffer)
+        else:
+            model_buffer = BytesIO()
+            joblib.dump(data, model_buffer)
+            model_buffer.seek(0)  # Reset buffer position to the beginning
+            s3.put_object(Bucket=bucket, Key=key, Body=model_buffer.getvalue())
+        print(f"Successfully wrote {key} to bucket {bucket}")
+    except (NoCredentialsError, PartialCredentialsError) as e:
+        print(f"Credentials error: {e}")
+    except Exception as e:
+        print(f"Failed to write to S3: {e}")
 
 
 def create_s3_client():

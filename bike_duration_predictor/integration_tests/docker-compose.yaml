@@ -1,6 +1,6 @@
 services:
   data-processing:
-    image: ${LOCAL_IMAGE_NAME}
+    image: ${DATAPROCESSING_IMAGE_NAME}
     ports:
       - "9000:8080"
     environment:
@@ -8,8 +8,17 @@ services:
       - S3_ENDPOINT_URL=http://localstack:4566/
       - AWS_ACCESS_KEY_ID=abc
       - AWS_SECRET_ACCESS_KEY=xyz
-#    volumes:
-#      - "./model:/app/model"
+
+  model-training:
+    image: ${MODELTRAINING_IMAGE_NAME}
+    ports:
+      - "9001:8080"
+    environment:
+      - AWS_DEFAULT_REGION=eu-west-1
+      - S3_ENDPOINT_URL=http://localstack:4566/
+      - AWS_ACCESS_KEY_ID=abc
+      - AWS_SECRET_ACCESS_KEY=xyz
+
   localstack:
     image: localstack/localstack
     ports:

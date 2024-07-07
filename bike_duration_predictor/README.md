@@ -69,12 +69,24 @@ This project provides a batch processing solution for predicting bike durations 
   make docker-rerun
   ```
 
+Here's an updated section of your README to reflect the integration tests for both data processing and model training:
+
 ## Integration Tests
-script builds a Docker image for service, starts all necessary services using Docker Compose, 
-uploads test data to a local S3 bucket in LocalStack, 
-and calls the data processing Lambda function. 
-It then downloads the processed output from S3 and
-compares it with the expected output
+
+### Data Processing Integration Test
+This script builds the Docker image for the data processing service, starts the necessary services using Docker Compose, uploads test data to a local S3 bucket in LocalStack, calls the data processing Lambda function, downloads the processed output from S3, and compares it with the expected output.
 ```bash
-integration_tests/run.sh
+make integration-test-data-processing
+```
+
+### Model Training Integration Test
+This script builds the Docker image for the model training service, starts the necessary services using Docker Compose, uploads test data to a local S3 bucket in LocalStack, calls the model training Lambda function, and validates that the metrics and model were saved to S3 and are not empty.
+```bash
+make integration-test-model-training
+```
+
+### Run All Integration Tests
+This command runs both the data processing and model training integration tests sequentially.
+```bash
+make integration-test-all
 ```
