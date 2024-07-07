@@ -1,3 +1,5 @@
+
+
 # Bike Duration Predictor Batch
 
 This project provides a batch processing solution for predicting bike durations using AWS Lambda, Docker, and Poetry for dependency management. The `Makefile` includes targets for building and running Docker containers, installing dependencies, running tests, and more.
