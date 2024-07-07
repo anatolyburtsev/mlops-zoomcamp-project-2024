@@ -1,0 +1,41 @@
+name: Integration Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  integration-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+    
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+
+    - name: Install dependencies
+      run: |
+        cd bike_duration_predictor
+        make install-prod
+
+    - name: Run data processing integration test
+      run: |
+        cd bike_duration_predictor
+        make integration-test-data-processing
+
+    - name: Run model training integration test
+      run: |
+        cd bike_duration_predictor
+        make integration-test-model-training
+

@@ -102,5 +102,5 @@ integration-test-model-training:
 integration-test-all: integration-test-data-processing integration-test-model-training
 
 # Run pre-commit hooks manually
-run-hooks:
+-hooks:
 	$(POETRY) run pre-commit run --all-files
