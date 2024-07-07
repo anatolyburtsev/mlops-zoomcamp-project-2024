@@ -1,7 +1,7 @@
 import pytest
 from sklearn.base import BaseEstimator
 
-from src.train_model import train_model, TrainedModel
+from src.train_model import TrainedModel, train_model
 from tests.test_data_processing import read_resource
 
 
@@ -19,5 +19,5 @@ def test_train_model(sample_df):
     assert 0 <= trained_model.metrics.mae <= 30
     assert -1 <= trained_model.metrics.r2 <= 1
 
-    assert hasattr(trained_model, 'model')
+    assert hasattr(trained_model, "model")
     assert isinstance(trained_model.model, BaseEstimator)

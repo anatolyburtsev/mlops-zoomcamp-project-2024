@@ -31,6 +31,7 @@ coverage: test
 # Install dependencies including dev
 install:
 	$(POETRY) install
+	$(POETRY) run pre-commit install
 
 # Install dependencies excluding dev
 install-prod:
@@ -99,3 +100,7 @@ integration-test-model-training:
 
 # Run all integration tests
 integration-test-all: integration-test-data-processing integration-test-model-training
+
+# Run pre-commit hooks manually
+run-hooks:
+	$(POETRY) run pre-commit run --all-files

@@ -13,7 +13,7 @@ This project provides a batch processing solution for predicting bike durations 
 
 ### Installation
 
-- **install**: Installs dependencies including development dependencies.
+- **install**: Installs dependencies including development dependencies and pre-commit hooks
   ```bash
   make install
   ```
@@ -22,6 +22,12 @@ This project provides a batch processing solution for predicting bike durations 
   ```bash
   make install-prod
   ```
+  
+- **run-hooks**: run pre-commit hooks manually
+  ```bash
+  make run-hooks
+  ```
+ 
 
 ### Testing
 
