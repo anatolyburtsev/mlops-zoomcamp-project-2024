@@ -30,7 +30,7 @@ aws --endpoint-url=http://localhost:4566 s3 cp data/train_model_input.csv s3://d
 
 # Call model training service
 echo "Calling model training service..."
-python call_model_training_lambda.py
+poetry run python call_model_training_lambda.py
 
 # Validate that metrics and model were saved to S3 and are not empty
 aws --endpoint-url=http://localhost:4566 s3 cp s3://data/model/metrics.json temp_data/

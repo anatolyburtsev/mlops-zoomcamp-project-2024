@@ -30,7 +30,7 @@ aws --endpoint-url=http://localhost:4566 s3 cp data/input.csv s3://data/input.cs
 
 # Call data processing service
 echo "Calling data processing service..."
-python call_data_processing_lambda.py
+poetry run python call_data_processing_lambda.py
 
 # Compare output file with expected one
 aws --endpoint-url=http://localhost:4566 s3 cp s3://data/output.csv temp_data/
