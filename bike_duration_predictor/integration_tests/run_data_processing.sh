@@ -14,7 +14,9 @@ else
     echo "No need to build image ${DATAPROCESSING_IMAGE_NAME}"
 fi
 
-# Start Docker Compose setup
+docker compose down || true
+docker compose build
+
 docker compose up -d data-processing localstack
 
 echo "Wait for services to start"
@@ -39,6 +41,7 @@ diff temp_data/output.csv data/expected_output.csv
 ERROR_CODE=$?
 
 if [ ${ERROR_CODE} != 0 ]; then
+    echo "Data processing test failed"
     docker compose logs
     docker compose down
     exit ${ERROR_CODE}

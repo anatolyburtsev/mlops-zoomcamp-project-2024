@@ -1,0 +1,5 @@
+{
+  "input_path": "s3://bike-duration-predictor-723351182543/input_data/input.csv",
+  "intermediate_path": "s3://bike-duration-predictor-723351182543/processed_data/processed_data.csv",
+  "model_output_path": "s3://bike-duration-predictor-723351182543/model"
+}

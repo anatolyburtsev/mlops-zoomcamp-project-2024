@@ -13,8 +13,8 @@ def validate_metrics(metrics):
 
 def main():
     event = {
-        "input_path": "s3://data/train_model_input.csv",
-        "output_path": "s3://data/model",
+        "intermediate_path": "s3://data/train_model_input.csv",
+        "model_output_path": "s3://data/model",
     }
 
     url = "http://localhost:9001/2015-03-31/functions/function/invocations"

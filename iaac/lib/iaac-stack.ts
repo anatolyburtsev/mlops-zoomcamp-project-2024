@@ -5,6 +5,7 @@ import * as ecr_assets from 'aws-cdk-lib/aws-ecr-assets';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import {Architecture} from "aws-cdk-lib/aws-lambda";
 import {Duration} from "aws-cdk-lib";
+import {Dag} from "./dag";
 
 
 export class IaacStack extends cdk.Stack {
@@ -22,6 +23,11 @@ export class IaacStack extends cdk.Stack {
       file: 'dataprocessing.dockerfile'
     });
 
+    const modelTrainingAsset = new ecr_assets.DockerImageAsset(this, 'ModelTrainingAsset', {
+      directory: '../bike_duration_predictor',
+      file: 'modeltraining.dockerfile'
+    });
+
     const dataProcessingFunction = new lambda.DockerImageFunction(this, "dataProcessingFunction", {
       code: lambda.DockerImageCode.fromEcr(dataProcessingAsset.repository, {
         tagOrDigest: dataProcessingAsset.imageTag
@@ -31,6 +37,21 @@ export class IaacStack extends cdk.Stack {
       memorySize: 512
     });
 
+    const modelTrainingFunction = new lambda.DockerImageFunction(this, "modelTrainingFunction", {
+      code: lambda.DockerImageCode.fromEcr(modelTrainingAsset.repository, {
+        tagOrDigest: modelTrainingAsset.imageTag
+      }),
+      architecture: Architecture.ARM_64,
+      timeout: Duration.minutes(5),
+      memorySize: 512
+    });
+
     dataBucket.grantReadWrite(dataProcessingFunction);
+    dataBucket.grantReadWrite(modelTrainingFunction);
+
+    const dag = new Dag(this, 'DAGStack', {
+      dataProcessingFunction: dataProcessingFunction,
+      modelTrainingFunction: modelTrainingFunction,
+    });
   }
 }

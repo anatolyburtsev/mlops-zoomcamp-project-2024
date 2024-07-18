@@ -10,7 +10,7 @@ from .utils import parse_s3_path, read_from_s3, write_to_s3
 def data_processing_lambda_handler(event, context):
     print(f"{event=}")
     input_path = event["input_path"]
-    output_path = event["output_path"]
+    output_path = event["intermediate_path"]
 
     input_bucket, input_key = parse_s3_path(input_path)
     output_bucket, output_key = parse_s3_path(output_path)
@@ -19,22 +19,22 @@ def data_processing_lambda_handler(event, context):
     processed_df = process_data(df)
     write_to_s3(processed_df, output_bucket, output_key)
 
-    return {"statusCode": 200, "body": json.dumps("Processing complete")}
+    return json.dumps({"status_code": 200, "intermediate_path": output_path})
 
 
 def model_train_lambda_handler(event, context):
-    input_path = event.get("input_path")
-    output_path = event.get("output_path")
+    input_path = event.get("intermediate_path")
+    output_path = event.get("model_output_path")
 
     if not input_path or not output_path:
         return {
-            "statusCode": 400,
+            "status_code": 400,
             "body": json.dumps("Missing input_path or output_path"),
         }
 
     if not input_path.startswith("s3://") or not output_path.startswith("s3://"):
         return {
-            "statusCode": 400,
+            "status_code": 400,
             "body": json.dumps("Paths must be S3 URLs starting with s3://"),
         }
 
@@ -59,4 +59,4 @@ def model_train_lambda_handler(event, context):
 
     print("Model training complete.")
 
-    return {"statusCode": 200, "body": json.dumps({"metrics": metrics})}
+    return json.dumps({"status_code": 200, "metrics": metrics, "model_output_path": output_path})
