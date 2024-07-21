@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 
 
 @dataclass
-class ModelMetrics:
+class BaseModelMetrics:
     """A data class to store the evaluation metrics of a trained model.
 
     Attributes
@@ -34,7 +34,7 @@ class TrainedModel:
 
     """
 
-    metrics: ModelMetrics
+    metrics: BaseModelMetrics
     model: LinearRegression
 
 
@@ -51,6 +51,6 @@ def train_model(df: pd.DataFrame, target_column="duration_min") -> TrainedModel:
     r2 = r2_score(y_test, y_pred)
     full_train_model = LinearRegression()
     full_train_model.fit(x, y)
-    metrics = ModelMetrics(mse=mse, mae=mae, r2=r2)
+    metrics = BaseModelMetrics(mse=mse, mae=mae, r2=r2)
 
     return TrainedModel(metrics=metrics, model=full_train_model)

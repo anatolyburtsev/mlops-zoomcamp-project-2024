@@ -56,7 +56,12 @@ def process(input_path, output_path):
     required=True,
     help="The path to save the trained model and metrics. Can be local or S3 path.",
 )
-def train(input_path, output_path):
+@click.option(
+    "--register-model",
+    is_flag=True,
+    help="If set, the model will be registered in SageMaker after training.",
+)
+def train(input_path, output_path, register_model):
     if input_path.startswith("s3://"):
         input_bucket, input_key = parse_s3_path(input_path)
         click.echo("Reading processed data from S3...")
@@ -66,7 +71,7 @@ def train(input_path, output_path):
         df = read_from_local(input_path)
 
     click.echo("Training model...")
-    trained_model = train_model(df)
+    trained_model = train_model(df, register_model=register_model)
 
     model_file = "model.pkl"
     metrics = trained_model.metrics.__dict__
