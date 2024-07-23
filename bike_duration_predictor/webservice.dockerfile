@@ -9,4 +9,4 @@ RUN poetry install --no-dev --no-root
 
 COPY src ${LAMBDA_TASK_ROOT}/src
 
-CMD ["src.lambda_handler.data_processing_lambda_handler"]
+CMD ["src.lambda_handler.inference_handler"]

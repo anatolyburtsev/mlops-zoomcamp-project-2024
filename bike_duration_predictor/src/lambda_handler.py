@@ -73,3 +73,15 @@ def model_train_lambda_handler(event, context):
 
     print("Model training and logging complete.")
     return json.dumps({"status_code": 200, "metrics": trained_model.metrics.__dict__, "mlflow_run_id": run_id})
+
+
+def inference_handler(event, context):
+    print(f"{event=}")
+    print(f"{context=}")
+
+    response = {
+        "statusCode": 200,
+        "headers": {"Content-Type": "application/json"},
+        "body": json.dumps({"ride_duration_minutes": 10}),
+    }
+    return response

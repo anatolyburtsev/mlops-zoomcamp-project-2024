@@ -9,6 +9,7 @@ import {Duration} from "aws-cdk-lib";
 import {Dag} from "./dag";
 import * as iam from 'aws-cdk-lib/aws-iam';
 import {MlflowConstruct} from "./mlflow";
+import {WebService} from "./webservice";
 
 
 
@@ -118,6 +119,8 @@ export class IaacStack extends cdk.Stack {
       value: mlflowElasticIp.ref,
       description: 'Mlflow public IP address',
     });
+
+    const webService = new WebService(this, 'WebService', {})
 
   }
 }
